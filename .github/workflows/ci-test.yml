@@ -2,21 +2,22 @@ name: Go
 
 on: [push, pull_request]
 
-runs-on: ${{ matrix.os }}
-strategy:
-  matrix:
-    os:
-      - ubuntu-latest
-      - ubuntu-16.04
-      - macos-latest
-    golang:
-      - 1.13
-      - 1.14
-      - master
-
 jobs:
   test:
     name: Test
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-16.04
+          - macos-latest
+        golang:
+          - 1.13
+          - 1.14
+
     steps:
     - uses: actions/setup-go@v2
       with:
