@@ -1,0 +1,30 @@
+name: Go
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Test
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-16.04
+          - macos-latest
+        golang:
+          - 1.13
+          - 1.14
+
+    steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.golang }}
+      id: go
+
+    - uses: actions/checkout@v2
+
+    - name: Run tests
+      run: make ci
