@@ -3,12 +3,12 @@ package plugin_test
 import (
 	"testing"
 
-	"github.com/gruz0/markdown-linter/internal/plugin"
+	. "github.com/gruz0/markdown-linter/internal/plugin"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestReturnsErrorIfNoPluginsSpecified(t *testing.T) {
-	loader := plugin.NewLoader()
+	loader := NewLoader()
 
 	result, err := loader.LoadPlugins([]string{})
 
@@ -17,7 +17,7 @@ func TestReturnsErrorIfNoPluginsSpecified(t *testing.T) {
 }
 
 func TestReturnsErrorIfPluginIsNotExists(t *testing.T) {
-	loader := plugin.NewLoader()
+	loader := NewLoader()
 
 	result, err := loader.LoadPlugins([]string{"test"})
 
@@ -26,7 +26,7 @@ func TestReturnsErrorIfPluginIsNotExists(t *testing.T) {
 }
 
 func TestReturnsFixmePlugin(t *testing.T) {
-	loader := plugin.NewLoader()
+	loader := NewLoader()
 
 	result, err := loader.LoadPlugins([]string{"fixme"})
 	assert.Nil(t, err)

@@ -4,13 +4,13 @@ import (
 	"testing"
 
 	"github.com/gruz0/markdown-linter/internal/entity"
-	"github.com/gruz0/markdown-linter/internal/plugins/fixme"
+	. "github.com/gruz0/markdown-linter/internal/plugins/fixme"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestLoadReturnsPluginInfo(t *testing.T) {
 	parent := entity.Plugin{}
-	plugin := fixme.Plugin{Plugin: &parent}
+	plugin := Plugin{Plugin: &parent}
 	info := plugin.Info()
 
 	assert.Equal(t, "FixmeTag", info.Name)
@@ -21,7 +21,7 @@ func TestLoadReturnsPluginInfo(t *testing.T) {
 
 func TestLintReturnsNoErrorsIfFIXMENotFound(t *testing.T) {
 	parent := entity.Plugin{}
-	plugin := fixme.Plugin{Plugin: &parent}
+	plugin := Plugin{Plugin: &parent}
 
 	result := plugin.Lint("content")
 
@@ -30,7 +30,7 @@ func TestLintReturnsNoErrorsIfFIXMENotFound(t *testing.T) {
 
 func TestLintSkipsForFIXMEWithoutColon(t *testing.T) {
 	parent := entity.Plugin{}
-	plugin := fixme.Plugin{Plugin: &parent}
+	plugin := Plugin{Plugin: &parent}
 
 	result := plugin.Lint("FIXME Test")
 
@@ -39,7 +39,7 @@ func TestLintSkipsForFIXMEWithoutColon(t *testing.T) {
 
 func TestLintReturnsErrorredLine(t *testing.T) {
 	parent := entity.Plugin{}
-	plugin := fixme.Plugin{Plugin: &parent}
+	plugin := Plugin{Plugin: &parent}
 
 	result := plugin.Lint("content\n\nFIXME: Test\n\nTest2")
 
@@ -52,7 +52,7 @@ func TestLintReturnsErrorredLine(t *testing.T) {
 
 func TestLintReturnsErrorredLineForNonCapitalizedFIXME(t *testing.T) {
 	parent := entity.Plugin{}
-	plugin := fixme.Plugin{Plugin: &parent}
+	plugin := Plugin{Plugin: &parent}
 
 	result := plugin.Lint("content\n\n\nfiXme: Test\n\nTest2")
 

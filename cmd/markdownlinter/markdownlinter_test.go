@@ -3,13 +3,13 @@ package markdownlinter_test
 import (
 	"testing"
 
-	"github.com/gruz0/markdown-linter/cmd/markdownlinter"
+	. "github.com/gruz0/markdown-linter/cmd/markdownlinter"
 	"github.com/gruz0/markdown-linter/internal/structs"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestReturnsErrorIfPluginIsNotExists(t *testing.T) {
-	ml := markdownlinter.NewMarkdownLinter()
+	ml := NewMarkdownLinter()
 
 	plugins := []string{"not-found"}
 	files := []string{"../../testdata/test.md"}
@@ -22,7 +22,7 @@ func TestReturnsErrorIfPluginIsNotExists(t *testing.T) {
 }
 
 func TestReturnsErrorIfFileIsNotExists(t *testing.T) {
-	ml := markdownlinter.NewMarkdownLinter()
+	ml := NewMarkdownLinter()
 
 	plugins := []string{"fixme"}
 	files := []string{"../../testdata/not-found.md"}
@@ -35,7 +35,7 @@ func TestReturnsErrorIfFileIsNotExists(t *testing.T) {
 }
 
 func TestFixmeTag(t *testing.T) {
-	ml := markdownlinter.NewMarkdownLinter()
+	ml := NewMarkdownLinter()
 
 	plugins := []string{"fixme"}
 	files := []string{"../../testdata/test.md"}
