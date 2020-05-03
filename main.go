@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/gruz0/markdown-linter/cmd/markdownlinter"
+	"github.com/markdown-linter/markdown-linter/cmd/markdownlinter"
 	"github.com/olekukonko/tablewriter"
 )
 

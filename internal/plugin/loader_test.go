@@ -3,7 +3,7 @@ package plugin_test
 import (
 	"testing"
 
-	. "github.com/gruz0/markdown-linter/internal/plugin"
+	. "github.com/markdown-linter/markdown-linter/internal/plugin"
 	"github.com/stretchr/testify/assert"
 )
 

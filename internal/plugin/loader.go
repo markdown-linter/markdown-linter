@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/gruz0/markdown-linter/internal/entity"
-	"github.com/gruz0/markdown-linter/internal/interfaces"
-	"github.com/gruz0/markdown-linter/internal/plugins/fixme"
+	"github.com/markdown-linter/markdown-linter/internal/entity"
+	"github.com/markdown-linter/markdown-linter/internal/interfaces"
+	"github.com/markdown-linter/markdown-linter/internal/plugins/fixme"
 )
 
 type Loader struct{}
