@@ -2,12 +2,12 @@ package main
 
 import (
 	"bufio"
+	"log"
 	"os"
 	"sort"
 	"strconv"
 
 	"github.com/gruz0/markdown-linter/cmd/markdownlinter"
-	"github.com/labstack/gommon/log"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -20,10 +20,14 @@ func main() {
 	result, err := markdownlinter.Lint(plugins, files)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error during linting: %v", err)
 	}
 
 	table := tablewriter.NewWriter(os.Stdout)
+
+	if len(result) == 0 {
+		os.Exit(0)
+	}
 
 	table.SetHeader([]string{"File", "Line", "Plugin", "Description"})
 
@@ -36,6 +40,8 @@ func main() {
 	}
 
 	table.Render()
+
+	os.Exit(1)
 }
 
 func getFiles() []string {
@@ -51,32 +57,3 @@ func getFiles() []string {
 
 	return files
 }
-
-// if len(errors) == 0 {
-// 	os.Exit(0)
-// }
-//
-// for _, e := range errors {
-// 	if len(e.errors) == 0 {
-// 		continue
-// 	}
-//
-// 	color.Info.Tips("Processing %s on %s", e.linter, e.fileName)
-//
-// 	var theme *color.Theme
-//
-// 	switch severity := e.severity; severity {
-// 	case WARN:
-// 		theme = color.Warn
-// 	case ERROR:
-// 		theme = color.Error
-// 	default:
-// 		theme = color.Info
-// 	}
-//
-// 	for _, errorMessage := range e.errors {
-// 		theme.Tips(errorMessage)
-// 	}
-// }
-//
-// os.Exit(1)
