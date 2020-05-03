@@ -1,6 +1,6 @@
 package interfaces
 
-import "github.com/gruz0/markdown-linter/internal/structs"
+import "github.com/markdown-linter/markdown-linter/internal/structs"
 
 type Plugin interface {
 	Info() *structs.PluginInfo

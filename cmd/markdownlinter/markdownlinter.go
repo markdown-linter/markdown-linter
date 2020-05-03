@@ -3,9 +3,9 @@ package markdownlinter
 import (
 	"io/ioutil"
 
-	"github.com/gruz0/markdown-linter/internal/interfaces"
-	"github.com/gruz0/markdown-linter/internal/plugin"
-	"github.com/gruz0/markdown-linter/internal/structs"
+	"github.com/markdown-linter/markdown-linter/internal/interfaces"
+	"github.com/markdown-linter/markdown-linter/internal/plugin"
+	"github.com/markdown-linter/markdown-linter/internal/structs"
 )
 
 type MarkdownLinter struct{}

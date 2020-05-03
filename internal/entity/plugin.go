@@ -3,8 +3,8 @@ package entity
 import (
 	"strings"
 
-	"github.com/gruz0/markdown-linter/internal/interfaces"
-	"github.com/gruz0/markdown-linter/internal/structs"
+	"github.com/markdown-linter/markdown-linter/internal/interfaces"
+	"github.com/markdown-linter/markdown-linter/internal/structs"
 )
 
 type Plugin struct {
