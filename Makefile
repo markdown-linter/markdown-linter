@@ -10,10 +10,10 @@ clean:
 dependencies:
 	$(GO) mod download
 
-build: dependencies build-cmd
+build: clean dependencies build-cmd
 
 build-cmd:
-	$(GO) build -o ./bin/markdown-linter ./main.go
+	sh -c "'$(CURDIR)/scripts/build.sh'"
 
 test:
 	$(GOTEST) -v -test.failfast ./...
