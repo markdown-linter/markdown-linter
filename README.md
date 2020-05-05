@@ -38,4 +38,16 @@ Examples:
 ```bash
 markdown-linter lint -R . -D testdata -f README.md
 ```
->>>>>>> c712430... Reorganize files
+
+Result:
+
+```bash
++------------------------------+------+--------------+--------------------------------+
+|             FILE             | LINE |    PLUGIN    |          DESCRIPTION           |
++------------------------------+------+--------------+--------------------------------+
+| testdata/another/test.md     |    1 | MissingH1Tag | Empty file could not be linted |
+| testdata/another.md          |    1 | MissingH1Tag | Empty file could not be linted |
+| testdata/markdown.md/test.md |    1 | MissingH1Tag | Empty file could not be linted |
+| testdata/test.md             |    3 | FixmeTag     | The line has FIXME tag         |
++------------------------------+------+--------------+--------------------------------+
+```
