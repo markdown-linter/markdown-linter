@@ -8,7 +8,7 @@ import (
 )
 
 type Plugin struct {
-	Plugin *entity.Plugin
+	entity.Plugin
 }
 
 func (p *Plugin) Info() *structs.PluginInfo {
