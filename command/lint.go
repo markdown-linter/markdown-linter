@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/markdown-linter/markdown-linter/cmd/markdownlinter"
+	"github.com/markdown-linter/markdown-linter/internal/markdownlinter"
 	"github.com/olekukonko/tablewriter"
 )
 

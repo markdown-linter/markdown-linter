@@ -3,7 +3,7 @@ package markdownlinter_test
 import (
 	"testing"
 
-	. "github.com/markdown-linter/markdown-linter/cmd/markdownlinter"
+	. "github.com/markdown-linter/markdown-linter/internal/markdownlinter"
 	"github.com/markdown-linter/markdown-linter/internal/structs"
 	"github.com/stretchr/testify/assert"
 )
