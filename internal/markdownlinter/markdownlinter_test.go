@@ -16,21 +16,19 @@ func TestLint_ReturnsErrorIfPluginDoesNotExist(t *testing.T) {
 
 	result, err := ml.Lint(plugins, files)
 
-	assert.NotNil(t, err)
-	assert.Equal(t, "plugin not-found was not found", err.Error())
+	assert.EqualError(t, err, "plugin \"not-found\" was not found")
 	assert.Len(t, result, 0)
 }
 
 func TestLint_ReturnsErrorIfFileDoesNotExist(t *testing.T) {
 	ml := NewMarkdownLinter()
 
-	plugins := []string{"fixme"}
+	plugins := []string{}
 	files := []string{"../../testdata/not-found.md"}
 
 	result, err := ml.Lint(plugins, files)
 
-	assert.NotNil(t, err)
-	assert.Equal(t, "open ../../testdata/not-found.md: no such file or directory", err.Error())
+	assert.EqualError(t, err, "open ../../testdata/not-found.md: no such file or directory")
 	assert.Len(t, result, 0)
 }
 
@@ -40,17 +38,16 @@ func TestLint_FixmeTag(t *testing.T) {
 	plugins := []string{"fixme"}
 	files := []string{"../../testdata/test.md"}
 
-	result, err := ml.Lint(plugins, files)
-
-	assert.Len(t, result, 1)
-
 	linterResult := structs.LinterResult{
 		FileName:         "../../testdata/test.md",
 		Line:             3,
 		Plugin:           "FixmeTag",
 		ErrorDescription: "The line has FIXME tag",
 	}
-	assert.Equal(t, linterResult, result[0])
 
-	assert.Nil(t, err)
+	result, err := ml.Lint(plugins, files)
+
+	assert.NoError(t, err)
+	assert.Len(t, result, 1)
+	assert.Equal(t, linterResult, result[0])
 }

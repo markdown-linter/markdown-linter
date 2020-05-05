@@ -7,28 +7,40 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLoadPlugins_ReturnsErrorIfNoPluginsSpecified(t *testing.T) {
-	loader := NewLoader()
-
-	result, err := loader.LoadPlugins([]string{})
-
-	assert.Equal(t, "you need to specify plugins", err.Error())
-	assert.Len(t, result, 0)
-}
-
 func TestLoadPlugins_ReturnsErrorIfPluginDoesNotExist(t *testing.T) {
 	loader := NewLoader()
 
 	result, err := loader.LoadPlugins([]string{"test"})
 
-	assert.Equal(t, "plugin test was not found", err.Error())
+	assert.EqualError(t, err, "plugin \"test\" was not found")
 	assert.Len(t, result, 0)
+}
+
+func TestLoadPlugins_ReturnsAllPluginsIfNoPluginsSpecified(t *testing.T) {
+	loader := NewLoader()
+
+	result, err := loader.LoadPlugins([]string{})
+
+	assert.NoError(t, err)
+
+	// NOTE: Do not forget to add test below for each new plugin
+	assert.Len(t, result, 2)
 }
 
 func TestLoadPlugins_ReturnsFixmePlugin(t *testing.T) {
 	loader := NewLoader()
 
 	result, err := loader.LoadPlugins([]string{"fixme"})
-	assert.Nil(t, err)
+
+	assert.NoError(t, err)
+	assert.Len(t, result, 1)
+}
+
+func TestLoadPlugins_ReturnsH1Plugin(t *testing.T) {
+	loader := NewLoader()
+
+	result, err := loader.LoadPlugins([]string{"h1"})
+
+	assert.NoError(t, err)
 	assert.Len(t, result, 1)
 }

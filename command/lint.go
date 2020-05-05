@@ -39,7 +39,7 @@ func (c *LintCommand) Run(args []string) int {
 		return 1
 	}
 
-	plugins := []string{"fixme"}
+	plugins := []string{}
 
 	markdownlinter := markdownlinter.NewMarkdownLinter()
 
