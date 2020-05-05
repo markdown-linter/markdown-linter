@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestReturnsErrorIfNoPluginsSpecified(t *testing.T) {
+func TestLoadPlugins_ReturnsErrorIfNoPluginsSpecified(t *testing.T) {
 	loader := NewLoader()
 
 	result, err := loader.LoadPlugins([]string{})
@@ -16,7 +16,7 @@ func TestReturnsErrorIfNoPluginsSpecified(t *testing.T) {
 	assert.Len(t, result, 0)
 }
 
-func TestReturnsErrorIfPluginIsNotExists(t *testing.T) {
+func TestLoadPlugins_ReturnsErrorIfPluginDoesNotExist(t *testing.T) {
 	loader := NewLoader()
 
 	result, err := loader.LoadPlugins([]string{"test"})
@@ -25,7 +25,7 @@ func TestReturnsErrorIfPluginIsNotExists(t *testing.T) {
 	assert.Len(t, result, 0)
 }
 
-func TestReturnsFixmePlugin(t *testing.T) {
+func TestLoadPlugins_ReturnsFixmePlugin(t *testing.T) {
 	loader := NewLoader()
 
 	result, err := loader.LoadPlugins([]string{"fixme"})

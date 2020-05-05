@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestReturnsErrorIfPluginIsNotExists(t *testing.T) {
+func TestLint_ReturnsErrorIfPluginDoesNotExist(t *testing.T) {
 	ml := NewMarkdownLinter()
 
 	plugins := []string{"not-found"}
@@ -21,7 +21,7 @@ func TestReturnsErrorIfPluginIsNotExists(t *testing.T) {
 	assert.Len(t, result, 0)
 }
 
-func TestReturnsErrorIfFileIsNotExists(t *testing.T) {
+func TestLint_ReturnsErrorIfFileDoesNotExist(t *testing.T) {
 	ml := NewMarkdownLinter()
 
 	plugins := []string{"fixme"}
@@ -34,7 +34,7 @@ func TestReturnsErrorIfFileIsNotExists(t *testing.T) {
 	assert.Len(t, result, 0)
 }
 
-func TestFixmeTag(t *testing.T) {
+func TestLint_FixmeTag(t *testing.T) {
 	ml := NewMarkdownLinter()
 
 	plugins := []string{"fixme"}

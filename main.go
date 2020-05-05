@@ -1,59 +1,32 @@
 package main
 
 import (
-	"bufio"
 	"log"
 	"os"
-	"sort"
-	"strconv"
+	"runtime"
 
-	"github.com/markdown-linter/markdown-linter/cmd/markdownlinter"
-	"github.com/olekukonko/tablewriter"
+	"github.com/mitchellh/cli"
 )
 
 func main() {
-	plugins := []string{"fixme"}
-	files := getFiles()
+	log.SetOutput(os.Stderr)
 
-	markdownlinter := markdownlinter.NewMarkdownLinter()
+	log.Printf("[INFO] markdown-linter version: %s %s", Version, GitCommit)
+	log.Printf("[INFO] Go runtime version: %s", runtime.Version())
+	log.Printf("[INFO] CLI args: %-v", os.Args)
 
-	result, err := markdownlinter.Lint(plugins, files)
+	cliRunner := &cli.CLI{
+		Name:     "markdown-linter",
+		Version:  Version,
+		Args:     os.Args[1:],
+		Commands: Commands(),
+	}
+
+	exitCode, err := cliRunner.Run()
 
 	if err != nil {
-		log.Fatalf("Error during linting: %v", err)
+		log.Println(err)
 	}
 
-	table := tablewriter.NewWriter(os.Stdout)
-
-	if len(result) == 0 {
-		os.Exit(0)
-	}
-
-	table.SetHeader([]string{"File", "Line", "Plugin", "Description"})
-
-	for _, linterResult := range result {
-		table.Append([]string{
-			linterResult.FileName,
-			strconv.Itoa(linterResult.Line),
-			linterResult.Plugin,
-			linterResult.ErrorDescription})
-	}
-
-	table.Render()
-
-	os.Exit(1)
-}
-
-func getFiles() []string {
-	files := make([]string, 0)
-
-	scanner := bufio.NewScanner(os.Stdin)
-
-	for scanner.Scan() {
-		files = append(files, scanner.Text())
-	}
-
-	sort.Strings(files)
-
-	return files
+	os.Exit(exitCode)
 }
