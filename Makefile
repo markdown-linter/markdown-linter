@@ -16,7 +16,7 @@ build-cmd:
 	sh -c "'$(CURDIR)/scripts/build.sh'"
 
 test:
-	$(GOTEST) -v -test.failfast ./...
+	$(GOTEST) -test.failfast ./...
 
 ci: dependencies test
 
