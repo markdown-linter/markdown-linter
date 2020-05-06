@@ -1,0 +1,18 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    name: Lint
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run golangci-lint
+      uses: actions-contrib/golangci-lint@v1
+      with:
+        golangci_lint_version: latest
+        args: run --no-config --disable-all --verbose --enable=govet --enable=errcheck --enable=staticcheck --enable=unused --enable=gosimple --enable=structcheck --enable=varcheck --enable=ineffassign --enable=deadcode --enable=bodyclose --enable=golint --enable=stylecheck --enable=gosec --enable=interfacer --enable=unconvert --enable=dupl --enable=goconst --enable=gocognit --enable=rowserrcheck --enable=gofmt --enable=goimports --enable=maligned --enable=depguard --enable=misspell --enable=lll --enable=unparam --enable=dogsled --enable=nakedret --enable=prealloc --enable=scopelint --enable=gocritic --enable=gochecknoinits --enable=gochecknoglobals --enable=godox --enable=funlen --enable=wsl --enable=goprintffuncname
