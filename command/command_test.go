@@ -15,9 +15,9 @@ func TestGetMarkdownFilesInDirectory_shouldReturnErrorIfDirectoryDoesNotExist(t 
 }
 
 func TestGetMarkdownFilesInDirectory_shouldReturnErrorIfItIsNotADirectory(t *testing.T) {
-	files, err := GetMarkdownFilesInDirectory("../testdata/test.md")
+	files, err := GetMarkdownFilesInDirectory("../testdata/errors.md")
 
-	assert.EqualError(t, err, "\"../testdata/test.md\" is not a directory")
+	assert.EqualError(t, err, "\"../testdata/errors.md\" is not a directory")
 	assert.Empty(t, files)
 }
 
@@ -32,9 +32,8 @@ func TestGetMarkdownFilesInDirectory_shouldReturnOnlyMarkdownFiles(t *testing.T)
 	files, err := GetMarkdownFilesInDirectory("../testdata")
 
 	assert.NoError(t, err)
-	assert.Len(t, files, 2)
-	assert.Contains(t, files, "../testdata/test.md")
-	assert.Contains(t, files, "../testdata/another.md")
+	assert.Len(t, files, 1)
+	assert.Contains(t, files, "../testdata/errors.md")
 }
 
 func TestGetMarkdownFilesInDirectoryRecursively_shouldReturnErrorIfDirectoryDoesNotExist(t *testing.T) {
@@ -45,9 +44,9 @@ func TestGetMarkdownFilesInDirectoryRecursively_shouldReturnErrorIfDirectoryDoes
 }
 
 func TestGetMarkdownFilesInDirectoryRecursively_shouldReturnErrorIfItIsNotADirectory(t *testing.T) {
-	files, err := GetMarkdownFilesInDirectoryRecursively("../testdata/test.md")
+	files, err := GetMarkdownFilesInDirectoryRecursively("../testdata/errors.md")
 
-	assert.EqualError(t, err, "\"../testdata/test.md\" is not a directory")
+	assert.EqualError(t, err, "\"../testdata/errors.md\" is not a directory")
 	assert.Empty(t, files)
 }
 
@@ -59,13 +58,12 @@ func TestGetMarkdownFilesInDirectoryRecursively_shouldReturnErrorIfPathContainsE
 }
 
 func TestGetMarkdownFilesInDirectoryRecursively_shouldReturnOnlyMarkdownFiles(t *testing.T) {
-	files, err := GetMarkdownFilesInDirectoryRecursively("../testdata")
+	files, err := GetMarkdownFilesInDirectoryRecursively("../")
 
 	assert.NoError(t, err)
-	assert.Len(t, files, 5)
-	assert.Contains(t, files, "../testdata/test.md")
-	assert.Contains(t, files, "../testdata/another.md")
-	assert.Contains(t, files, "../testdata/another/test.md")
+	assert.Len(t, files, 4)
+	assert.Contains(t, files, "../README.md")
+	assert.Contains(t, files, "../testdata/errors.md")
 	assert.Contains(t, files, "../testdata/markdown.md/test.md")
-	assert.Contains(t, files, "../testdata/valid/header-one.md")
+	assert.Contains(t, files, "../testdata/valid/valid.md")
 }

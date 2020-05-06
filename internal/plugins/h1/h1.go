@@ -13,9 +13,9 @@ type Plugin struct {
 
 func (p *Plugin) Info() *structs.PluginInfo {
 	return &structs.PluginInfo{
-		Name:             "MissingH1Tag",
+		Name:             "H1Tag",
 		Contributors:     []string{"Alexander Kadyrov <alexander@kadyrov.dev>"},
-		ErrorDescription: "The document does not have Header tag",
+		ErrorDescription: "The document does not have valid H1 tag",
 	}
 }
 
@@ -28,20 +28,16 @@ func (p *Plugin) Lint(content string) []structs.Offence {
 
 	lines := strings.Split(content, "\n")
 
-	firstLine := lines[0]
+	line := strings.TrimSpace(lines[0])
 
-	if len(firstLine) < 3 {
-		return append(result, structs.Offence{Line: 1, Description: "The first line is too short"})
+	if len(line) == 0 || line[0:1] != "#" {
+		return append(result, structs.Offence{Line: 1, Description: p.Info().ErrorDescription})
 	}
 
-	if firstLine[0:2] != "# " {
-		return append(result, structs.Offence{Line: 1, Description: "The first line must be started with #"})
-	}
-
-	header := strings.TrimSpace(firstLine[3:])
+	header := strings.TrimSpace(line[1:])
 
 	if len(header) == 0 {
-		return append(result, structs.Offence{Line: 1, Description: "Empty header found"})
+		return append(result, structs.Offence{Line: 1, Description: "Tag found, but value is empty"})
 	}
 
 	return result

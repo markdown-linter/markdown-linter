@@ -55,7 +55,7 @@ func TestLint_singleDirectory_doesNotExist(t *testing.T) {
 func TestLint_singleDirectory_isNotADirectory(t *testing.T) {
 	c := &LintCommand{}
 
-	exitCode := c.Run([]string{"-D", "../testdata/test.md"})
+	exitCode := c.Run([]string{"-D", "../testdata/errors.md"})
 
 	assert.Equal(t, 1, exitCode)
 }
@@ -79,7 +79,7 @@ func TestLint_recursiveDirectory_doesNotExist(t *testing.T) {
 func TestLint_recursiveDirectory_isNotADirectory(t *testing.T) {
 	c := &LintCommand{}
 
-	exitCode := c.Run([]string{"-R", "../testdata/test.md"})
+	exitCode := c.Run([]string{"-R", "../testdata/errors.md"})
 
 	assert.Equal(t, 1, exitCode)
 }
@@ -111,7 +111,7 @@ func TestLint_singleFile_isNotAFile(t *testing.T) {
 func TestLint_singleFile_valid(t *testing.T) {
 	c := &LintCommand{}
 
-	exitCode := c.Run([]string{"-f", "../testdata/valid/header-one.md"})
+	exitCode := c.Run([]string{"-f", "../testdata/valid/valid.md"})
 
 	assert.Equal(t, 0, exitCode)
 }
