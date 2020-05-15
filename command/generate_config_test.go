@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	. "github.com/markdown-linter/markdown-linter/command"
+	"github.com/markdown-linter/markdown-linter/internal/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -103,13 +104,13 @@ func TestGenerateConfig_hasValidDefaultConfigContent(t *testing.T) {
 
 	_ = c.Run([]string{})
 
-	content, err := ioutil.ReadFile(defaultConfigPath)
+	content, err := utils.ReadFile(defaultConfigPath)
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assert.YAMLEq(t, "plugins: []", string(content))
+	assert.YAMLEq(t, "plugins: []", content)
 }
 
 func tempFile(t *testing.T) *os.File {

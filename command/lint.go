@@ -55,6 +55,7 @@ func (c *LintCommand) Run(args []string) int {
 		return 0
 	}
 
+	table.SetAutoWrapText(false)
 	table.SetHeader([]string{"File", "Line", "Plugin", "Description"})
 
 	for _, linterResult := range lintErrors {

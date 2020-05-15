@@ -11,3 +11,5 @@ FIXME It must be skipped because of missing required colon
 [Link without anchor](#)
 
 ![](my/broken/image.png)
+
+# Invalid Header Location
