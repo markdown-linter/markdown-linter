@@ -24,7 +24,7 @@ func TestLoadPlugins_ReturnsAllPluginsIfNoPluginsSpecified(t *testing.T) {
 	assert.NoError(t, err)
 
 	// NOTE: Do not forget to add test below for each new plugin
-	assert.Len(t, result, 2)
+	assert.Len(t, result, 3)
 }
 
 func TestLoadPlugins_ReturnsFixmePlugin(t *testing.T) {
@@ -40,6 +40,15 @@ func TestLoadPlugins_ReturnsH1Plugin(t *testing.T) {
 	loader := NewLoader()
 
 	result, err := loader.LoadPlugins([]string{"h1"})
+
+	assert.NoError(t, err)
+	assert.Len(t, result, 1)
+}
+
+func TestLoadPlugins_ReturnsBrokenLinksPlugin(t *testing.T) {
+	loader := NewLoader()
+
+	result, err := loader.LoadPlugins([]string{"brokenlinks"})
 
 	assert.NoError(t, err)
 	assert.Len(t, result, 1)

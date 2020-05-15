@@ -1,11 +1,10 @@
 package markdownlinter
 
 import (
-	"io/ioutil"
-
 	"github.com/markdown-linter/markdown-linter/internal/interfaces"
 	"github.com/markdown-linter/markdown-linter/internal/plugin"
 	"github.com/markdown-linter/markdown-linter/internal/structs"
+	"github.com/markdown-linter/markdown-linter/internal/utils"
 )
 
 type MarkdownLinter struct{}
@@ -28,13 +27,11 @@ func (ml *MarkdownLinter) Lint(plugins []string, files []string) ([]structs.Lint
 	}
 
 	for _, fileName := range files {
-		bytes, err := ioutil.ReadFile(fileName)
+		content, err := utils.ReadFile(fileName)
 
 		if err != nil {
 			return result, err
 		}
-
-		content := string(bytes)
 
 		for _, plugin := range loadedPlugins {
 			info := plugin.Info()
