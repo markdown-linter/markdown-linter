@@ -46,6 +46,22 @@ func Test_Plugin_BrokenLinks_Lint_ReturnsNoErrorsOn200HTTPStatusCode(t *testing.
 	assert.Len(t, result, 0)
 }
 
+func Test_Plugin_BrokenLinks_Lint_ReturnsNoErrorsBecauseOfCanvaProtectedByCloudFlare(t *testing.T) {
+	plugin := Plugin{}
+
+	result := plugin.Lint("[Link](https://www.canva.com)")
+
+	assert.Len(t, result, 0)
+}
+
+func Test_Plugin_BrokenLinks_Lint_ReturnsNoErrorsBecauseOfTimewebRequiresUserAgent(t *testing.T) {
+	plugin := Plugin{}
+
+	result := plugin.Lint("[Link](http://timeweb.com/ru/?i=23372)")
+
+	assert.Len(t, result, 0)
+}
+
 func Test_Plugin_BrokenLinks_Lint_ReturnsNoErrorsIfLinkDoesNotHaveProtocolScheme(t *testing.T) {
 	t.Skip("TODO: Check URL without protocol scheme: kadyrov.dev")
 }

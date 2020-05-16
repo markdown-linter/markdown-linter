@@ -1,13 +1,16 @@
 package brokenlinks
 
 import (
+	"compress/gzip"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"net/http"
 	"net/url"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -57,6 +60,8 @@ func (p *Plugin) Lint(content string) []structs.Offence {
 	return result
 }
 
+const brokenLinkFormat = "Broken link %q found in %q. Error: %s"
+
 func checkLink(link markdownparserStructs.Tag, c chan Result) {
 	linkURL := getURL(link.Content)
 
@@ -89,35 +94,33 @@ func checkLink(link markdownparserStructs.Tag, c chan Result) {
 		return
 	}
 
-	response, err := httpClient().Get(linkURL)
+	response, err := doRequest(linkURL)
 
 	if err != nil {
-		var message string
-
-		switch err.(type) {
-		case *url.Error:
-			message = "No such host"
-		default:
-			message = err.Error()
-		}
-
-		c <- buildError(link.Line, fmt.Sprintf("Broken link %q found in %q. Error: %s", linkURL, link.Content, message))
+		c <- buildError(link.Line, fmt.Sprintf(brokenLinkFormat, linkURL, link.Content, formatRequestErrorMessage(err)))
 
 		return
 	}
 
 	defer response.Body.Close()
 
-	if response.StatusCode == 200 {
+	errorMessage := fmt.Sprintf(brokenLinkFormat, linkURL, link.Content, strconv.Itoa(response.StatusCode))
+
+	switch response.StatusCode {
+	case 200:
 		c <- Result{Broken: false}
+	case 403:
+		content := getContent(response)
 
-		return
+		// If the page secured by Cloudflare, then we decide it is not an error
+		if strings.Contains(content, "Cloudflare") {
+			c <- Result{Broken: false}
+		} else {
+			c <- buildError(link.Line, errorMessage)
+		}
+	default:
+		c <- buildError(link.Line, errorMessage)
 	}
-
-	c <- buildError(
-		link.Line,
-		fmt.Sprintf("Broken link %q found in %q. Error: %d", linkURL, link.Content, response.StatusCode),
-	)
 }
 
 func getURL(content string) string {
@@ -152,10 +155,45 @@ func isReferToLocalFileOrDirectory(uri string) bool {
 	return err == nil && (stat.Mode().IsRegular() || stat.Mode().IsDir())
 }
 
+func doRequest(linkURL string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", linkURL, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("User-Agent", "Broken Link Checker/1.0.0")
+	req.Header.Add("Accept-Encoding", "gzip")
+
+	return httpClient().Do(req)
+}
+
+func formatRequestErrorMessage(err error) string {
+	var message string
+
+	switch err.(type) {
+	case *url.Error:
+		switch {
+		// It is needed because Go 1.13 has quoted domain in error message and it is triggered error while running in CI
+		case strings.Contains(err.Error(), "no such host"):
+			message = "No such host"
+		// It is needed because of Telegram blocked in Russia and we want to clean error message content
+		case strings.Contains(err.Error(), "connection refused"):
+			message = "Connection refused by provider"
+		default:
+			message = err.Error()
+		}
+	default:
+		message = err.Error()
+	}
+
+	return message
+}
+
 func httpClient() *http.Client {
 	netTransport := &http.Transport{
 		Dial: (&net.Dialer{
-			Timeout: 3 * time.Second,
+			Timeout: 10 * time.Second,
 		}).Dial,
 		TLSHandshakeTimeout:   5 * time.Second,
 		ResponseHeaderTimeout: 10 * time.Second,
@@ -177,4 +215,34 @@ func buildError(line int, description string) Result {
 	result.Offence = offence
 
 	return result
+}
+
+func getContent(response *http.Response) string {
+	var (
+		reader io.ReadCloser
+		err    error
+	)
+
+	switch response.Header.Get("Content-Encoding") {
+	case "gzip":
+		reader, err = gzip.NewReader(response.Body)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		defer reader.Close()
+	default:
+		reader = response.Body
+	}
+
+	var buf strings.Builder
+
+	_, err = io.Copy(&buf, reader) //nolint:gosec
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return buf.String()
 }
